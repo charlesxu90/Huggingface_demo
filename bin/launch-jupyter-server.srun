@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# setup the environment
+#module purge
+#conda activate ./env
+
+# setup ssh tunneling 
+export XDG_RUNTIME_DIR=/tmp 
+IBEX_NODE=$(hostname -s) 
+KAUST_USER=$(whoami)  
+JUPYTER_PORT=$SLURM_STEP_RESV_PORTS
+
+echo "
+Creat a port tunnel using the command below in the local machine:
+ssh -NfL ${JUPYTER_PORT}:${IBEX_NODE}:${JUPYTER_PORT} ${KAUST_USER}@glogin.ibex.kaust.edu.sa 
+" >&2
+
+# launch jupyter server
+jupyter lab --no-browser --port=${JUPYTER_PORT} --ip=${IBEX_NODE}
